@@ -1,0 +1,75 @@
+cabal-version: 3.4
+name:          stlc
+version:       0.1.0.0
+license:       ISC
+license-file:  LICENSE
+maintainer:    kevin@pnotequalnp.com
+author:        Kevin Mullins
+category:      Language
+
+library
+  exposed-modules:
+    Lambda
+    Lambda.Eval
+    Lambda.Parser
+    Lambda.Renamer
+    Lambda.Syntax
+    Lambda.Typechecker
+    Parser
+    Repl
+    Repl.Command
+    Repl.Parser
+
+  hs-source-dirs:     src
+  default-language:   GHC2021
+  default-extensions:
+    BlockArguments
+    DerivingVia
+    DuplicateRecordFields
+    ImplicitParams
+    LambdaCase
+    NoFieldSelectors
+    NoStarIsType
+    OverloadedRecordDot
+    OverloadedStrings
+    PatternSynonyms
+
+  ghc-options:
+    -Wall -Wcompat -Wno-name-shadowing -Werror=incomplete-patterns
+    -Werror=missing-fields -Werror=incomplete-record-updates
+    -Werror=missing-deriving-strategies
+
+  build-depends:
+    , base        ^>=4.18.1.0
+    , megaparsec
+    , mtl
+    , primitive
+    , text
+    , text-short
+
+executable stlc
+  main-is:            Main.hs
+  hs-source-dirs:     app
+  default-language:   GHC2021
+  default-extensions:
+    BlockArguments
+    DerivingVia
+    DuplicateRecordFields
+    ImplicitParams
+    LambdaCase
+    NoFieldSelectors
+    NoStarIsType
+    OverloadedRecordDot
+    OverloadedStrings
+    PatternSynonyms
+
+  ghc-options:
+    -Wall -Wcompat -Wno-name-shadowing -Werror=incomplete-patterns
+    -Werror=missing-fields -Werror=incomplete-record-updates
+    -Werror=missing-deriving-strategies
+
+  build-depends:
+    , base        ^>=4.18.1.0
+    , stlc
+    , text
+    , text-short
