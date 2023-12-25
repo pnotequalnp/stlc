@@ -48,4 +48,4 @@ expr = \case
     pure Lam {param, typ, body}
 
 intrinsicNames :: [(ShortText, Name)]
-intrinsicNames = [("Int", Int), ("add", Add)]
+intrinsicNames = [("Type", Type), ("Int", Int), ("add", Add)]

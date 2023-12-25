@@ -13,6 +13,9 @@ data Name
 renderName :: Name -> Text
 renderName = ShortText.toText . (.name)
 
+pattern Type :: Name
+pattern Type = Intrinsic {name = "Type"}
+
 pattern Int :: Name
 pattern Int = Intrinsic {name = "Int"}
 

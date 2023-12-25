@@ -30,6 +30,7 @@ renderType = LazyText.toStrict . Builder.toLazyText . go
 
 data TypeError
   = Unification {expected :: Type, actual :: Type}
+  | KindError {expected :: Type, actual :: Type}
   | UnsupportedExpr {}
 
 newtype Infer a = Infer (ReaderT [(Name, Type)] (Either TypeError) a)
@@ -65,14 +66,22 @@ infer = \case
         | otherwise -> typeError Unification {expected = param, actual = arg}
       _ -> typeError Unification {expected = TFun {param = arg, result = TUnknown}, actual = fun}
   Lam {param, typ, body}
-    | Var {name} <- typ -> do
+    | e@Var {name} <- typ -> do
+        kind <- infer e
+        case kind of
+          TVar Type -> pure ()
+          _ -> typeError KindError {actual = kind, expected = TVar Type}
         let paramt = TVar {name}
         result <- bindVar param paramt (infer body)
         pure TFun {param = paramt, result}
     | otherwise -> typeError UnsupportedExpr {}
 
 intrinsicTypes :: [(Name, Type)]
-intrinsicTypes = [(Add, TVar Int --> TVar Int --> TVar Int)]
+intrinsicTypes =
+  [ (Type, TVar Type)
+  , (Int, TVar Type)
+  , (Add, TVar Int --> TVar Int --> TVar Int)
+  ]
 
 newtype UnboundVariable = UnboundVariable {name :: Name}
   deriving stock (Show)
