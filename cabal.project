@@ -1,0 +1,6 @@
+packages: .
+
+package diagnose
+  flags: +megaparsec-compat
+
+allow-newer: diagnose:text

@@ -7,13 +7,14 @@ import Data.Text.Short (ShortText)
 import Data.Void (Void)
 import Text.Megaparsec (ParseErrorBundle, runParser)
 
-import Lambda.Renamer (runRename)
+import Lambda.Eval (Value, eval, runEval)
+import Lambda.Renamer (UnboundVariable (..), runRename)
 import Lambda.Renamer qualified as Renamer
 import Lambda.Syntax (Name (..))
 import Lambda.Typechecker (Type, TypeError, infer, runInfer)
+import Parser qualified
 import Repl.Command (Command (..))
 import Repl.Parser qualified as Parser
-import Lambda.Eval (Value, runEval, eval)
 
 data Result
   = Value {typ :: Type, value :: Value}
@@ -21,17 +22,17 @@ data Result
   | Typing {name :: ShortText, typ :: Type}
   | UnknownCommand {name :: ShortText}
   | ParseError {errors :: ParseErrorBundle Text Void}
-  | UnboundVars {unbound :: NonEmpty ShortText}
+  | UnboundVars {unbound :: NonEmpty UnboundVariable}
   | TypeError {typeError :: TypeError}
 
 command :: Int -> [(ShortText, Name)] -> [(Name, Type)] -> [(Name, Value)] -> Text -> Result
-command key names types values s = case runParser Parser.command "" s of
+command key names types values s = case runParser (Parser.sc *> Parser.command) "" s of
   Left errors -> ParseError {errors}
   Right cmd -> case cmd of
     Unknown {name} -> UnknownCommand {name}
-    Type {name} -> case lookup name names of
+    Type {name, source} -> case lookup name names of
       Just name | Just typ <- lookup name types -> Typing {name = name.name, typ}
-      _ -> UnboundVars {unbound = NonEmpty.singleton name}
+      _ -> UnboundVars {unbound = NonEmpty.singleton UnboundVariable {name, source}}
     Bind {name, value} -> case evalExpr value of
       Value {typ, value} -> Binding {name, typ, value}
       res -> res

@@ -18,13 +18,11 @@ directive = do
   name <- ShortText.fromText <$> lexeme (takeWhile1P Nothing isAlpha)
   case name of
     "let" -> do
-      name <- ident
+      name <- lexeme ident
       _ <- symbol "="
       value <- expr
       pure Bind {name, value}
-    "type" -> do
-      name <- ident
-      pure Type {name}
+    "type" -> located (Type <$> ident)
     _ -> Unknown {name} <$ takeWhileP Nothing (const True)
 
 eval :: Parser Command

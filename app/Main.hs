@@ -4,14 +4,18 @@ import Control.Monad (when)
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
 import Data.Text.Short qualified as ShortText
+import Error.Diagnose (Diagnostic, TabSize (..), WithUnicode (..), addFile, defaultStyle, printDiagnostic, addReport)
+import Error.Diagnose.Compat.Megaparsec (errorDiagnosticFromBundle)
 import System.Exit (exitSuccess)
-import System.IO (hFlush, isEOF, stdout)
+import System.IO (hFlush, isEOF, stderr, stdout)
 
+import Data.Text (Text)
 import Lambda (intrinsicNames, intrinsicTypes, intrinsicValues)
 import Lambda.Eval (renderValue)
 import Lambda.Syntax (Name (..))
-import Lambda.Typechecker (renderType)
+import Lambda.Typechecker (renderType, typeErrorDiagnostic)
 import Repl (Result (..), command)
+import Lambda.Renamer (unboundVarReport)
 
 main :: IO ()
 main = loop 0 intrinsicNames intrinsicTypes intrinsicValues
@@ -46,14 +50,20 @@ main = loop 0 intrinsicNames intrinsicTypes intrinsicValues
               Text.putStr "unknown command: "
               print name
               pure (key, [], [], [])
-            ParseError {} -> do
-              Text.putStrLn "parse error"
+            ParseError {errors} -> do
+              let diag = addFile (errorDiagnosticFromBundle Nothing "parse error" Nothing errors) "" (Text.unpack s)
+              stderrDiagnostic diag
               pure (key, [], [], [])
             UnboundVars {unbound} -> do
-              Text.putStr "unbound vars: "
-              print unbound
+              let reports = foldl (\d u -> addReport d (unboundVarReport u)) mempty unbound
+                  diag = addFile reports "" (Text.unpack s)
+              stderrDiagnostic diag
               pure (key, [], [], [])
-            TypeError {} -> do
-              Text.putStrLn "type error"
+            TypeError {typeError} -> do
+              let diag = addFile (typeErrorDiagnostic typeError) "" (Text.unpack s)
+              stderrDiagnostic diag
               pure (key, [], [], [])
           loop key (newNames <> names) (newTypes <> types) (newValues <> values)
+
+stderrDiagnostic :: Diagnostic Text -> IO ()
+stderrDiagnostic = printDiagnostic stderr WithUnicode (TabSize 2) defaultStyle
