@@ -4,7 +4,6 @@ import Data.List.NonEmpty (NonEmpty)
 import Data.List.NonEmpty qualified as NonEmpty
 import Data.Text (Text)
 import Data.Text.Short (ShortText)
-import Data.Void (Void)
 import Text.Megaparsec (ParseErrorBundle, runParser)
 
 import Lambda.Eval (Value, eval, runEval)
@@ -12,6 +11,7 @@ import Lambda.Renamer (UnboundVariable (..), runRename)
 import Lambda.Renamer qualified as Renamer
 import Lambda.Syntax (Name (..), Span)
 import Lambda.Typechecker (Type, TypeError, infer, runInfer)
+import Parser (ParseError)
 import Parser qualified
 import Repl.Command (Command (..))
 import Repl.Parser qualified as Parser
@@ -21,7 +21,7 @@ data Result
   | Binding {name :: ShortText, typ :: Type, value :: Value}
   | Typing {name :: ShortText, typ :: Type}
   | UnknownCommand {name :: ShortText, source :: Span}
-  | ParseError {errors :: ParseErrorBundle Text Void}
+  | ParseError {errors :: ParseErrorBundle Text ParseError}
   | UnboundVars {unbound :: NonEmpty UnboundVariable}
   | TypeError {typeError :: TypeError}
   | ShowHelp {}
