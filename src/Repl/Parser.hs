@@ -15,7 +15,9 @@ command = choice [directive, eval] <* eof
 directive :: Parser Command
 directive = do
   _ <- char ':'
-  name <- ShortText.fromText <$> lexeme (takeWhile1P Nothing isAlpha)
+  (name, source) <- located do
+    name <- takeWhile1P Nothing isAlpha
+    pure (ShortText.fromText name, )
   case name of
     "let" -> do
       name <- lexeme ident
@@ -23,7 +25,9 @@ directive = do
       value <- expr
       pure Bind {name, value}
     "type" -> located (Type <$> ident)
-    _ -> Unknown {name} <$ takeWhileP Nothing (const True)
+    "help" -> Help {} <$ takeWhileP Nothing (const True)
+    "quit" -> Quit {} <$ takeWhileP Nothing (const True)
+    _ -> Unknown {name, source} <$ takeWhileP Nothing (const True)
 
 eval :: Parser Command
 eval = Eval <$> expr

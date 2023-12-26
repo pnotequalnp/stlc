@@ -8,4 +8,6 @@ data Command
   = Bind {name :: ShortText, value :: Expr}
   | Type {name :: ShortText, source :: Span}
   | Eval {expr :: Expr}
-  | Unknown {name :: ShortText}
+  | Help {}
+  | Quit {}
+  | Unknown {name :: ShortText, source :: Span}

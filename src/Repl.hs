@@ -10,7 +10,7 @@ import Text.Megaparsec (ParseErrorBundle, runParser)
 import Lambda.Eval (Value, eval, runEval)
 import Lambda.Renamer (UnboundVariable (..), runRename)
 import Lambda.Renamer qualified as Renamer
-import Lambda.Syntax (Name (..))
+import Lambda.Syntax (Name (..), Span)
 import Lambda.Typechecker (Type, TypeError, infer, runInfer)
 import Parser qualified
 import Repl.Command (Command (..))
@@ -20,16 +20,20 @@ data Result
   = Value {typ :: Type, value :: Value}
   | Binding {name :: ShortText, typ :: Type, value :: Value}
   | Typing {name :: ShortText, typ :: Type}
-  | UnknownCommand {name :: ShortText}
+  | UnknownCommand {name :: ShortText, source :: Span}
   | ParseError {errors :: ParseErrorBundle Text Void}
   | UnboundVars {unbound :: NonEmpty UnboundVariable}
   | TypeError {typeError :: TypeError}
+  | ShowHelp {}
+  | QuitRepl {}
 
 command :: Int -> [(ShortText, Name)] -> [(Name, Type)] -> [(Name, Value)] -> Text -> Result
 command key names types values s = case runParser (Parser.sc *> Parser.command) "" s of
   Left errors -> ParseError {errors}
   Right cmd -> case cmd of
-    Unknown {name} -> UnknownCommand {name}
+    Unknown {name, source} -> UnknownCommand {name, source}
+    Help {} -> ShowHelp {}
+    Quit {} -> QuitRepl {}
     Type {name, source} -> case lookup name names of
       Just name | Just typ <- lookup name types -> Typing {name = name.name, typ}
       _ -> UnboundVars {unbound = NonEmpty.singleton UnboundVariable {name, source}}
