@@ -27,7 +27,7 @@ atom = choice [parens expr, int, lam, var]
 
 int :: Parser Expr
 int = located do
-  Num <$> lexeme ({-Lex.signed empty -}Lex.decimal)
+  Num <$> Lex.decimal
 
 lam :: Parser Expr
 lam = located do
