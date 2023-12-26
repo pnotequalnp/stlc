@@ -1,5 +1,27 @@
-module Lambda (intrinsicNames, intrinsicTypes, intrinsicValues) where
+module Lambda (
+  -- * Types
+  Name (..),
+  Type (..),
+  renderType,
+  Value (..),
+  renderValue,
 
-import Lambda.Eval (intrinsicValues)
-import Lambda.Renamer (intrinsicNames)
-import Lambda.Typechecker (intrinsicTypes)
+  -- * Errors
+  UnboundVariable (..),
+  unboundVarReport,
+  TypeError (..),
+  typeErrorDiagnostic,
+
+  -- * Intrinsics
+  intrinsicNames,
+  intrinsicTypes,
+  intrinsicValues,
+
+  -- * Utilities
+  spanPosition,
+) where
+
+import Lambda.Eval (Value (..), intrinsicValues, renderValue)
+import Lambda.Renamer (UnboundVariable (..), intrinsicNames, unboundVarReport)
+import Lambda.Syntax (Name (..), spanPosition)
+import Lambda.Typechecker (Type (..), TypeError (..), intrinsicTypes, renderType, typeErrorDiagnostic)

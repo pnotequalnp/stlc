@@ -11,11 +11,7 @@ import Error.Diagnose.Compat.Megaparsec (errorDiagnosticFromBundle)
 import System.Exit (exitSuccess)
 import System.IO (hFlush, isEOF, stdout)
 
-import Lambda (intrinsicNames, intrinsicTypes, intrinsicValues)
-import Lambda.Eval (Value, renderValue)
-import Lambda.Renamer (unboundVarReport)
-import Lambda.Syntax (Name (..), spanPosition)
-import Lambda.Typechecker (Type, renderType, typeErrorDiagnostic)
+import Lambda (Name (..), Type, Value, intrinsicNames, intrinsicTypes, intrinsicValues, renderType, renderValue, spanPosition, typeErrorDiagnostic, unboundVarReport)
 import Repl (Result (..), command)
 
 main :: IO ()
