@@ -14,14 +14,12 @@ data Name
 renderName :: Name -> Text
 renderName = ShortText.toText . (.name)
 
-pattern Type :: Name
+pattern Type, Int, Add, Sub, Mul :: Name
 pattern Type = Intrinsic {name = "Type"}
-
-pattern Int :: Name
 pattern Int = Intrinsic {name = "Int"}
-
-pattern Add :: Name
 pattern Add = Intrinsic {name = "add"}
+pattern Sub = Intrinsic {name = "sub"}
+pattern Mul = Intrinsic {name = "mul"}
 
 data Expr
   = Num {value :: Int64, source :: Span}

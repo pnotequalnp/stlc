@@ -63,4 +63,4 @@ expr = \case
     pure Arr {input, output, source}
 
 intrinsicNames :: [(ShortText, Name)]
-intrinsicNames = [("Type", Type), ("Int", Int), ("add", Add)]
+intrinsicNames = [("Type", Type), ("Int", Int), ("add", Add), ("sub", Sub), ("mul", Mul)]

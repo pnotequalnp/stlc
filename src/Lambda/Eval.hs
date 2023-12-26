@@ -49,6 +49,8 @@ eval = \case
 intrinsicValues :: [(Name, Value)]
 intrinsicValues =
   [ (Add, arith (+))
+  , (Sub, arith (-))
+  , (Mul, arith (*))
   ]
   where
     arith (<+>) = Closure \case

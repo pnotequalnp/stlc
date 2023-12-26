@@ -111,6 +111,8 @@ intrinsicTypes =
   [ (Type, TVar Type)
   , (Int, TVar Type)
   , (Add, TVar Int --> TVar Int --> TVar Int)
+  , (Sub, TVar Int --> TVar Int --> TVar Int)
+  , (Mul, TVar Int --> TVar Int --> TVar Int)
   ]
 
 newtype UnboundVariable = UnboundVariable {name :: Name}
