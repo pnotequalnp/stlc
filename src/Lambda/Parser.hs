@@ -1,6 +1,9 @@
-module Lambda.Parser where
+module Lambda.Parser (
+  -- * Parsers
+  expr,
+) where
 
-import Control.Monad.Combinators.Expr (makeExprParser, Operator (..))
+import Control.Monad.Combinators.Expr (Operator (..), makeExprParser)
 import Text.Megaparsec
 import Text.Megaparsec.Char.Lexer qualified as Lex
 

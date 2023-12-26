@@ -1,4 +1,17 @@
-module Lambda.Typechecker where
+module Lambda.Typechecker(
+  -- * Types
+  Infer,
+  runInfer,
+  Type (..),
+  renderType,
+  TypeError (..),
+  typeErrorDiagnostic,
+  UnboundVariable (..),
+
+  -- * Typechecking
+  infer,
+  intrinsicTypes,
+) where
 
 import Control.Exception (Exception, throw)
 import Control.Monad (unless)

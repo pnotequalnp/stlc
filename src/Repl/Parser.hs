@@ -1,13 +1,15 @@
-module Repl.Parser where
+module Repl.Parser (
+  command,
+) where
 
 import Data.Char (isAlpha)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
+import Data.Text.Short qualified as ShortText
 import Lambda.Parser (expr)
 import Parser
 import Repl.Command
-import qualified Data.Text.Short as ShortText
 
 command :: Parser Command
 command = choice [directive, eval] <* eof
@@ -17,7 +19,7 @@ directive = do
   _ <- char ':'
   (name, source) <- located do
     name <- takeWhile1P Nothing isAlpha
-    pure (ShortText.fromText name, )
+    pure (ShortText.fromText name,)
   case name of
     "let" -> do
       name <- lexeme ident

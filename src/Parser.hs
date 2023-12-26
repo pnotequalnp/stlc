@@ -1,4 +1,19 @@
-module Parser where
+module Parser (
+  -- * Types
+  Parser,
+  ParseError,
+
+  -- * Parsers
+  ident,
+  lexeme,
+  symbol,
+  sc,
+  located,
+
+  -- * Utilities
+  toSpan,
+  pattern Pos,
+) where
 
 import Data.Char (isAlphaNum)
 import Data.Text (Text)

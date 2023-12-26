@@ -1,4 +1,21 @@
-module Lambda.Syntax where
+module Lambda.Syntax (
+  -- * Names
+  Name (..),
+  pattern Type,
+  pattern Int,
+  pattern Add,
+  pattern Sub,
+  pattern Mul,
+  renderName,
+
+  -- * Expressions
+  Expr (..),
+
+  -- * Source
+  Span (..),
+  spanPosition,
+)
+where
 
 import Data.Int (Int64)
 import Data.Text (Text)

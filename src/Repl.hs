@@ -1,4 +1,10 @@
-module Repl where
+module Repl (
+  -- * Types
+  Result (..),
+
+  -- * REPL
+  command,
+) where
 
 import Data.List.NonEmpty (NonEmpty)
 import Data.List.NonEmpty qualified as NonEmpty

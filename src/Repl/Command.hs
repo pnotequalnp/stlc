@@ -1,4 +1,6 @@
-module Repl.Command where
+module Repl.Command (
+  Command (..),
+) where
 
 import Data.Text.Short (ShortText)
 

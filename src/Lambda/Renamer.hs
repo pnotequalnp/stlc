@@ -1,4 +1,14 @@
-module Lambda.Renamer where
+module Lambda.Renamer (
+  -- * Types
+  Rename (..),
+  runRename,
+  UnboundVariable (..),
+  unboundVarReport,
+
+  -- * Renaming
+  expr,
+  intrinsicNames,
+) where
 
 import Control.Monad.RWS.CPS (RWS, asks, get, local, put, runRWS, tell)
 import Data.List.NonEmpty (NonEmpty, nonEmpty)

@@ -1,4 +1,15 @@
-module Lambda.Eval where
+module Lambda.Eval (
+  -- * Types
+  Eval (..),
+  runEval,
+  Value (..),
+  renderValue,
+  RuntimeError (..),
+
+  -- * Eval
+  eval,
+  intrinsicValues,
+) where
 
 import Control.Exception (Exception, throw)
 import Data.Int (Int64)
