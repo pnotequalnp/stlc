@@ -46,7 +46,7 @@ loop key names types values = do
     ShowHelp {} -> do
       Text.putStrLn "Available commands: help, quit, let, type"
       continue
-    QuitRepl {} -> pure ()
+    QuitRepl {} -> exitSuccess
     UnknownCommand {name, source} -> do
       let msg = "unknown command: " <> ShortText.toText name
           hint = Hint "use `:help` to see all commands"
