@@ -55,7 +55,7 @@ typeErrorDiagnostic :: TypeError -> Diagnostic Text
 typeErrorDiagnostic = \case
   Unification {expected, actual, source} -> uniError expected actual source
   KindError {expected, actual, source} -> uniError expected actual source
-  UnsupportedExpr {source} -> addReport mempty (Err Nothing "syntax error" [(spanPosition source, This "type syntax in expr")] [])
+  UnsupportedExpr {source} -> addReport mempty (Err Nothing "syntax error" [(spanPosition source, This "type syntax in expression")] [])
   UnsupportedType {source} -> addReport mempty (Err Nothing "syntax error" [(spanPosition source, This "expression syntax in type")] [])
   where
     uniError expected actual source = addReport mempty (Err Nothing msg [(spanPosition source, This ptr)] [])
