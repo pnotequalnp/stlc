@@ -17,7 +17,7 @@ import Repl (Result (..), command)
 main :: IO ()
 main = loop 0 intrinsicNames intrinsicTypes intrinsicValues
 
-loop :: Int -> [(ShortText, Name)] -> [(Name, Type)] -> [(Name, Value)] -> IO ()
+loop :: Int -> [(ShortText, Name)] -> [(Name, Type)] -> [(Name, Value)] -> IO a
 loop key names types values = do
   Text.putStr "> "
   hFlush stdout
